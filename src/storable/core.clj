@@ -17,9 +17,9 @@
   ([] (setup *uri* (io/resource "schema.edn")))
   ([uri schema] 
      (d/create-database uri)
-     (if-let [conn (d/connect uri)]
-       (doto conn
-         (d/transact (load-schema schema))))))
+     (when-let [conn (d/connect uri)]
+       @(d/transact conn (load-schema schema))
+       conn)))
 
 (defn transform-keys
   "Rename all keys in m by applying (func key).
