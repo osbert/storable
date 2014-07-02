@@ -53,10 +53,19 @@
 (defn ->datomic [prefix]
   (partial add-prefix prefix))
 
-(defn ->clj [entity]
+(defn ->clj
+  "Given an entity map, convert it into a Clojure map."
+  [entity]
   (->> entity
        (into {})
        remove-prefix))
+
+(defn eid->entity
+  "Given an entity ID, turn it into a Datomic entity map."
+  [db eid]
+  (->> eid
+       (d/entity db)
+       d/touch))
 
 (defprotocol Storable
   (persist-tx [this] "Return array of Datomic transactions required to persist this."))
