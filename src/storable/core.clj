@@ -67,6 +67,13 @@
        (d/entity db)
        d/touch))
 
+(defn eid->clj
+  "Given an entity ID, return a Clojure map representing it's datoms."
+  [db eid]
+  (->> eid
+       (eid->entity db)
+       ->clj))
+
 (defprotocol Storable
   (persist-tx [this] "Return array of Datomic transactions required to persist this."))
 
