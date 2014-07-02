@@ -3,7 +3,8 @@
   (:require [clojure.set :refer [rename-keys]]
             [clojure.java.io :as io]
             [environ.core :refer [env]]
-            [datomic.api :as d]))
+            [datomic.api :as d]
+            [clojure.edn :as edn]))
 
 (def ^:dynamic *uri* (or (env :datomic-uri)
                          "datomic:mem://storable"))
@@ -64,3 +65,10 @@
   "Persist storable in Datomic storage."
   [conn storable]
   (d/transact conn (persist-tx storable)))
+
+(defn read-resource [filename]
+  (-> filename
+      slurp
+      java.io.StringReader.
+      java.io.PushbackReader.
+      edn/read))
