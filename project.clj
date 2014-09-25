@@ -7,5 +7,6 @@
                  [environ "0.4.0"]
                  [com.datomic/datomic-pro "0.9.4755" :exclusions [org.apache.httpcomponents/httpclient]]]
   :repositories {"my.datomic.com" {:url "https://my.datomic.com/repo"
-                                   :creds :gpg}}
+                                   :username [:gpg  :env/MY_DATOMIC_USERNAME]
+                                   :password [:gpg :env/MY_DATOMIC_PASSWORD]}}
   :plugins [[lein-environ "0.5.0"]])
