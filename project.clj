@@ -1,6 +1,6 @@
-(defproject storable "0.2.0"
-  :description "FIXME: write description"
-  :url "http://example.com/FIXME"
+(defproject com.iterinc/storable "0.2.0"
+  :description "Utility functions for basic Clojure maps <=> Datomic"
+  :url "https://github.com/osbert/storable"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.6.0"]
