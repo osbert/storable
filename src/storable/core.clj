@@ -88,3 +88,16 @@
       java.io.StringReader.
       java.io.PushbackReader.
       edn/read))
+
+(defn valid-attributes
+  "Return the set of valid attributes out of an input set of keys."
+  [db attrs]
+  (->> (d/q '[:find ?a :in $ [?a ...] :where
+               [?e :db/ident ?a]]
+             db
+             attrs)
+       (map first)
+       (into #{})))
+
+
+
