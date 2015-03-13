@@ -75,12 +75,18 @@
        ->clj))
 
 (defprotocol Storable
-  (persist-tx [this] "Return array of Datomic transactions required to persist this."))
+  (persist-tx [this] "Return array of Datomic transactions required to persist this.")
+  (retract-tx [this] "Return array of Datomic transactions required to retract this"))
 
 (defn persist!
   "Persist storable in Datomic storage."
   [conn storable]
   (d/transact conn (persist-tx storable)))
+
+(defn retract!
+  "Retract storable from Datomic storage"
+  [conn storable]
+  (d/transact conn (retract-tx storable)))
 
 (defn read-resource [filename]
   (-> filename
@@ -98,6 +104,4 @@
              attrs)
        (map first)
        (into #{})))
-
-
 
