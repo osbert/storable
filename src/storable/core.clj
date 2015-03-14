@@ -78,15 +78,27 @@
   (persist-tx [this] "Return array of Datomic transactions required to persist this.")
   (retract-tx [this] "Return array of Datomic transactions required to retract this"))
 
+(defn annotate-tx
+  "I can never remember how to annotate a tx."
+  [annotations]
+  (if annotations
+    (merge annotations {:db/id (d/tempid :db.part/tx)})))
+
 (defn persist!
   "Persist storable in Datomic storage."
-  [conn storable]
-  (d/transact conn (persist-tx storable)))
+  [conn storable & tx-annotations]
+  (-> storable
+      persist-tx
+      (concat (annotate-tx tx-annotations))
+      (->> (d/transact conn))))
 
 (defn retract!
-  "Retract storable from Datomic storage"
-  [conn storable]
-  (d/transact conn (retract-tx storable)))
+  "Retract storable from Datomic storage."
+  [conn storable & tx-annotations]
+  (-> storable
+      retract-tx
+      (concat (annotate-tx tx-annotations)) 
+      (->> (d/transact conn))))
 
 (defn read-resource [filename]
   (-> filename
@@ -104,4 +116,5 @@
              attrs)
        (map first)
        (into #{})))
+
 
