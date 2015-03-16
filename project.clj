@@ -1,4 +1,4 @@
-(defproject com.iterinc/storable "0.4.0"
+(defproject com.iterinc/storable "0.5.0"
   :description "Utility functions for basic Clojure maps <=> Datomic"
   :url "https://github.com/osbert/storable"
   :license {:name "Eclipse Public License"
