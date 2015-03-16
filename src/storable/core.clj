@@ -117,4 +117,17 @@
        (map first)
        (into #{})))
 
+(defn find-storable
+  "Return full entity given id-key and id."
+  [db id-key id]
+  (-> db
+      (d/entity [id-key id])
+      d/touch))
 
+(defn find-all
+  "Return all entities given an id-key"
+  [db id-key]
+  (->> (d/q '[:find ?e :in $ ?attr :where [?e ?attr]] db id-key)
+       (map first)
+       (map (partial d/entity db))
+       (map d/touch)))
