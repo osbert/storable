@@ -108,14 +108,24 @@
       edn/read))
 
 (defn valid-attributes
-  "Return the set of valid attributes out of an input set of keys."
+  "Return the set of valid attributes out of an input set of keys.
+
+  NOTE: From a security perspective you likely still want to enforce
+  slightly stricter constraints such as enforcing namespace or
+  specific entity id restrictions in your transactions.
+
+  But, this will prevent your transactions from throwing exceptions
+  due to including an attribute that does not exist in the schema."
   [db attrs]
-  (->> (d/q '[:find ?a :in $ [?a ...] :where
-               [?e :db/ident ?a]]
-             db
-             attrs)
-       (map first)
-       (into #{})))
+  (conj (->> (d/q '[:find ?a :in $ [?a ...] :where
+                    [?e :db/ident ?a]]
+                  db
+                  attrs)
+             (map first)
+             (into #{}))
+        ;; Explicitly allow :db/id at the end since it apparently
+        ;; doesn't show up as an entity with a :db/ident or in attrs.
+        :db/id))
 
 (defn find-storable
   "Return full entity given id-key and id."
