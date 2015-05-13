@@ -120,9 +120,8 @@
 (defn find-storable
   "Return full entity given id-key and id."
   [db id-key id]
-  (-> db
-      (d/entity [id-key id])
-      d/touch))
+  (if-let [eid (d/entity db [id-key id])]
+    (d/touch eid)))
 
 (defn find-all
   "Return all entities given an id-key"
