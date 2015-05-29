@@ -4,10 +4,14 @@
             [clojure.java.io :as io]
             [environ.core :refer [env]]
             [datomic.api :as d]
-            [clojure.edn :as edn]))
+            [clojure.edn :as edn]
+            [slingshot.slingshot :refer [throw+]]))
 
-(def ^:dynamic *uri* (or (env :datomic-uri)
-                         "datomic:mem://storable"))
+(def ^:dynamic *uri*
+  (if-not *compile-files*
+    (if-let [uri (env :datomic-uri)]
+      uri
+      "datomic:mem://storable")))
 
 (defn load-schema
   ([] (load-schema (io/resource "schema.edn")))
